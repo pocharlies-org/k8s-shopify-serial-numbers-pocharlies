@@ -38,7 +38,15 @@ patches:
                     valueFrom: { secretKeyRef: { name: shared-postgres-app, key: username } }
                   - name: DB_PASSWORD
                     valueFrom: { secretKeyRef: { name: shared-postgres-app, key: password } }
-                  - { name: DATABASE_URL, value: "postgresql://$(DB_USER):$(DB_PASSWORD)@postgres-shared-rw.databases.svc.cluster.local:5432/serial_numbers" }
+                  # connection_limit: sin él Prisma dimensiona el pool con
+                  # `cpus_fisicos * 2 + 1` LEIDO DEL HOST, no del límite del
+                  # contenedor. Estos pods van a `role: edge` (sauvage, 48 vCPU,
+                  # sin cpu limit) y el framework instancia un PrismaClient
+                  # además del de la app → techo ~98 por pod. Ver el postmortem
+                  # del 28-07-2026 en la base del framework.
+                  # Este overlay sobrescribe DATABASE_URL, así que NO hereda el
+                  # default acotado de base/deployment.yaml: hay que ponerlo aquí.
+                  - { name: DATABASE_URL, value: "postgresql://$(DB_USER):$(DB_PASSWORD)@postgres-shared-rw.databases.svc.cluster.local:5432/serial_numbers?connection_limit=5&pool_timeout=15&connect_timeout=10&application_name=serial-app" }
                 envFrom:
                   - secretRef: { name: serial-secrets }
   - target: { group: apps, version: v1, kind: Deployment, name: app }
