@@ -20,7 +20,7 @@ La base `k8s-shopify-framework-pocharlies` (no se copia aquí).
 Overlay delgado: `namePrefix`, imagen, `SHOPIFY_APP_URL=https://skirmshop.e-dani.com/sn`, parche del `match` del IngressRoute a `PathPrefix(/sn)`.
 
 ## Tests y validaciones
-Ninguno. No hay `.github/`: no pasa por el CI reusable.
+El único workflow es `.github/workflows/pr-review.yml`, que llama a `pocharlies-org/k8s-gitops-pocharlies/.github/workflows/reusable-pr-review.yml@main` (review de PR, no bloquea), corre en los runners del scale set `arc-personal-shopify-serial-numbers` (SC-1579) y no pasa por `reusable-ci.yml`.
 
 ## CI/CD y despliegue
 ArgoCD lee `main` de este repo. Sin workflow de release; el pin de imagen se edita en `kustomization.yaml` (no verificado quién lo hace).
