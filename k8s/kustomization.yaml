@@ -4,7 +4,7 @@ kind: Kustomization
 namespace: skirmshop
 
 resources:
-  - https://github.com/pocharlies/k8s-shopify-framework-pocharlies.git//base?ref=deploy/prod
+  - https://github.com/pocharlies-org/k8s-shopify-framework-pocharlies.git//base?ref=deploy/prod
   - pvc.yaml
 
 namePrefix: serial-
