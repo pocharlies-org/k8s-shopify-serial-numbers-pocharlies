@@ -17,7 +17,8 @@ labels:
 images:
   - name: shopify-app
     newName: harbor.lan.e-dani.com/homelab/skirmshop-serial-numbers
-    newTag: v2026.05.25-postgres
+    newTag: sha-db7f38c
+    digest: sha256:8c60bbc1b0a328d0cae6a009047e71366e672b95024b923f7f03adb6219e7948
 
 patches:
   - target: { kind: Deployment, name: app }
